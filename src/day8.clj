@@ -15,7 +15,7 @@
   (loop [line-num 0
          seen #{}
          acc 0]
-    (println "func" line-num seen acc)
+    ;; (println "func" line-num seen acc)
     (if (seen line-num)
       [:fails acc]
       (let [line (nth steps line-num :end)]
@@ -23,7 +23,7 @@
           [:ends acc]
           (let [{:keys [instruction value]} line
                 seen-next (conj seen line-num)]
-        (println "step" instruction value)
+        ;; (println "step" instruction value)
             (condp = instruction
               :nop (recur (inc line-num) seen-next acc)
               :acc (recur (inc line-num) seen-next (+ acc value))
@@ -45,19 +45,12 @@
         :skip
         (assoc original i new-line)))))
 
-(->> sample
+(->> input
      parse-input
      vec
      build-modified-instructions
      (filter #(not= % :skip))
-     (map find-acc-before-repeat))
+     (map find-acc-before-repeat)
+     (filter (fn [[k _]] (= k :ends))))
 
-(find-acc-before-repeat [{:instruction :nop, :value 0}
-                           {:instruction :acc, :value 1}
-                           {:instruction :jmp, :value 4}
-                           {:instruction :acc, :value 3}
-                           {:instruction :nop, :value -3}
-                           {:instruction :acc, :value -99}
-                           {:instruction :acc, :value 1}
-                           {:instruction :jmp, :value -4}
-                           {:instruction :acc, :value 6}])
+
