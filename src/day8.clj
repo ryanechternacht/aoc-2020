@@ -52,5 +52,3 @@
      (filter #(not= % :skip))
      (map find-acc-before-repeat)
      (filter (fn [[k _]] (= k :ends))))
-
-
