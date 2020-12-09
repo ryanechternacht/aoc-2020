@@ -54,3 +54,11 @@
      parse-input
      (run-tests-2 127)
      (filter (fn [{:keys [outcome]}] outcome)))
+
+(comment 
+  (let [master-list (parse-input input)]
+    (->> (range 388 (inc 404))
+         (map #(nth master-list %))
+         ((juxt #(apply min %) #(apply max %)))
+         (apply +))))
+
