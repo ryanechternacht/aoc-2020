@@ -1,31 +1,32 @@
-(ns day4.code)
+(ns day04
+  (:require [clojure.string :as s]))
 
-(def sample "resources/day4-sample.txt")
-(def input "resources/day4.txt")
-
-(defn parse-input [file]
-  (-> file
-      slurp
-      (clojure.string/split #"\n")
-      split-on-blank-lines))
+(def sample "resources/day04-sample.txt")
+(def input "resources/day04.txt")
 
 (defn split-on-blank-lines
   "takes a seq of strings in which some lines are blank. breaks the seq into sublists
    on blank lines. the sublists are concatted into a single line (separated by an additional space)"
   [coll] (:items
           (reduce (fn [{:keys [current] :as acc} line]
-                    (if (clojure.string/blank? line)
+                    (if (s/blank? line)
                       (-> acc
-                          (update :items conj (clojure.string/trim current))
+                          (update :items conj (s/trim current))
                           (assoc :current ""))
                       (update acc :current str " " line)))
                   {:items [] :current ""}
                   coll)))
 
+(defn parse-input [file]
+  (-> file
+      slurp
+      (s/split #"\n")
+      split-on-blank-lines))
+
 (defn line-to-map [line]
   (->> line
-       (#(clojure.string/split % #" "))
-       (map #(clojure.string/split % #":"))
+       (#(s/split % #" "))
+       (map #(s/split % #":"))
        (reduce (fn [m [k v]] (assoc m (keyword k) v)) {})))
 
 (defn valid-passport? [passport]

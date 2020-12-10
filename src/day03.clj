@@ -1,12 +1,13 @@
-(ns day3.code)
+(ns day03
+  (:require [clojure.string :as s]))
 
-(def sample "resources/day3-sample.txt")
-(def input "resources/day3.txt")
+(def sample "resources/day03-sample.txt")
+(def input "resources/day03.txt")
 
 (defn parse-input [file]
   (->> file
        slurp
-       (#(clojure.string/split % #"\n"))
+       (#(s/split % #"\n"))
        (map vec)
        vec))
 

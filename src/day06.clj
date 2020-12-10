@@ -1,8 +1,8 @@
-(ns day6
-  (:require [clojure.set :as s]))
+(ns day06
+  (:require [clojure.string :as s]))
 
-(def sample "resources/day6-sample.txt")
-(def input "resources/day6.txt")
+(def sample "resources/day06-sample.txt")
+(def input "resources/day06.txt")
 
 (defn split-on-blank-lines
   "takes a seq of strings in which some lines are blank. breaks the seq into sublists
@@ -10,26 +10,26 @@
   [coll]
   (let [lines
         (reduce (fn [{:keys [current] :as acc} line]
-                  (if (clojure.string/blank? line)
+                  (if (s/blank? line)
                     (-> acc
-                        (update :items conj (clojure.string/trim current))
+                        (update :items conj (s/trim current))
                         (assoc :current ""))
                     (update acc :current str " " line)))
                 {:items [] :current ""}
                 coll)]
-    (if (clojure.string/blank? (:current lines))
+    (if (s/blank? (:current lines))
       (:items lines)
-      (conj (:items lines) (clojure.string/trim (:current lines))))))
+      (conj (:items lines) (s/trim (:current lines))))))
 
 (defn parse-input [file]
   (->> file
        slurp
-       (#(clojure.string/split % #"\n"))
+       (#(s/split % #"\n"))
        split-on-blank-lines))
 
 (defn line-to-set [line]
   (->> line
-       (#(clojure.string/split % #" "))
+       (#(s/split % #" "))
        (reduce into #{})))
 
 (defn count-answers [line]

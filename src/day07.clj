@@ -1,8 +1,8 @@
-(ns day7
+(ns day07
   (:require [clojure.string :as s]))
 
-(def sample "resources/day7-sample.txt")
-(def input "resources/day7.txt")
+(def sample "resources/day07-sample.txt")
+(def input "resources/day07.txt")
 
 (defn parse-input [file]
   (->> file

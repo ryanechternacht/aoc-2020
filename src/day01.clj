@@ -1,11 +1,12 @@
-(ns day1.code)
+(ns day01
+  (:require [clojure.string :as s]))
 
-(def file "resources/day1.txt")
+(def file "resources/day01.txt")
 
 (defn read-lines [file]
   (->> file
        slurp
-       (#(clojure.string/split % #"\n"))
+       (#(s/split % #"\n"))
        (map read-string)))
 
 (let [nums (read-lines file)

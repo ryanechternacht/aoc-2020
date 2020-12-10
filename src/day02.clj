@@ -1,14 +1,15 @@
-(ns day2.code)
+(ns day02
+  (:require [clojure.string :as s]))
 
-(def file "resources/day2.txt")
+(def file "resources/day02.txt")
 
 (defn parse-input [file]
   (->> file
        slurp
-       (#(clojure.string/split % #"\n"))
-       (map #(clojure.string/split % #" "))
+       (#(s/split % #"\n"))
+       (map #(s/split % #" "))
        (map (fn [[range-raw letter-raw test]]
-              (let [[range-min range-max] (clojure.string/split range-raw #"-")]
+              (let [[range-min range-max] (s/split range-raw #"-")]
                 {:min (read-string range-min)
                  :max (read-string range-max)
                  :letter (.charAt letter-raw 0)

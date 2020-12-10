@@ -1,7 +1,7 @@
-(ns day9)
+(ns day09)
 
-(def sample "resources/day9-sample.txt")
-(def input "resources/day9.txt")
+(def sample "resources/day09-sample.txt")
+(def input "resources/day09.txt")
 
 (defn parse-input [file]
   (->> file

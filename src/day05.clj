@@ -1,12 +1,13 @@
-(ns day5)
+(ns day05
+  :require [clojure.string :as s])
 
-(def sample "resources/day5-sample.txt")
-(def input "resources/day5.txt")
+(def sample "resources/day05-sample.txt")
+(def input "resources/day05.txt")
 
 (defn parse-input [file]
   (->> file
        slurp
-       (#(clojure.string/split % #"\n"))))
+       (#(s/split % #"\n"))))
 
 (defn convert-to-binary [line]
   (let [m {\B "1" \F "0" \L "0" \R "1"}]
