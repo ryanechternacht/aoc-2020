@@ -1,5 +1,5 @@
 (ns day05
-  :require [clojure.string :as s])
+  (:require [clojure.string :as s]))
 
 (def sample "resources/day05-sample.txt")
 (def input "resources/day05.txt")
