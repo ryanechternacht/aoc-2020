@@ -33,7 +33,7 @@
               ways (+ plus-1 plus-2 plus-3)]
           (recur xs (assoc combs x ways)))))))
 
-(find-combinations (->> sample
+(find-combinations (->> input
                         parse-input
                         (#(conj % 0))
                         (#(conj % (+ 3 (apply max %))))
