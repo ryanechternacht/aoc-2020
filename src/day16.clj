@@ -75,7 +75,7 @@
 ;;                    [i (every? dp l)])]
 ;;   dp-results)
 
-(let [{:keys [other-tickets fields]} (parse-input sample-2)
+(let [{:keys [other-tickets fields]} (parse-input input)
       passes-any-fn (fn [n] (some #(% n) (vals fields)))
       passing-tickets (filter #(every? passes-any-fn %) other-tickets)
       cols (for [i (range (count fields))]
@@ -92,3 +92,32 @@
   (println (count passing-tickets))
   (println (count other-tickets))
   filtered)
+
+;; determined manually. there is always a column that has only 1 hit, or a fn that has
+;; only 1 column. so you could just loop, look for it, and drop that number from all 
+;; others until you get to the end
+;; 
+;; class 15
+;; price 1
+;; seat 19
+;; arrival platform 1
+;; arrival station 7
+;; duration 16
+;; type 1
+;; row 0
+;; arrival location 4
+;; arrival track 2
+;; depature track 13
+;; departure station 8
+;; departure location 12
+;; departur platform 18
+;; departure date 3
+;; departure time 10
+;; zone 9
+;; train 11
+;; route 6
+;; wagon 5
+
+;; 0   1  2   3  4   5   6   7   8  9   10  11 12  13  14 15  16 17  18  19
+;; 157,89,103,59,101,181,109,127,67,173,151,97,107,167,61,131,53,163,179,113
+(* 167 67 107 179 59 151)
