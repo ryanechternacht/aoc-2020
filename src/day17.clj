@@ -112,7 +112,7 @@
                   :else b)))
             board spaces)))
 
-(->> (reduce (fn [b _] (step-2 b)) (make-board-2 (parse-input sample) 7) (range 6))
+(->> (reduce (fn [b _] (step-2 b)) (make-board-2 (parse-input input) 7) (range 6))
      flatten
      (filter #(= \# %))
      count)
