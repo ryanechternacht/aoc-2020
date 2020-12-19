@@ -62,44 +62,28 @@
                                        [(do-math-2 l) t-rest])
                                      [(read-string token-1-raw) (rest tokens)])]
     (loop [ops [token-1]
-           times nil
+           add nil
            [t & t-rest] remaining-tokens]
+      (println ops add t t-rest)
       (if (nil? t)
-        (apply + ops)
+        (apply * ops)
         (let [[operand operator new-remaining]
               (case t
                 "+" [nil + t-rest]
                 "*" [nil * t-rest]
                 "(" (let [[o r] (make-group t-rest)]
-                      [(do-math o) nil r])
+                      [(do-math-2 o) nil r])
                 [(read-string t) nil t-rest])]
           (cond
-            (= + operator) (recur ops nil new-remaining)
-            (= * operator) (recur ops true new-remaining)
-            times (let [o (last ops)]
-                    (recur (conj ops (* o operand)) nil new-remaining))
+            (= + operator) (recur ops true new-remaining)
+            (= * operator) (recur ops false new-remaining)
+            add (let [o (last ops)
+                        new-ops (pop ops)]
+                    (recur (conj new-ops (+ o operand)) nil new-remaining))
             :else (recur (conj ops operand) nil new-remaining)))))))
 
-(do-math-2 (tokenize "2 * 3 + (4 * 5)"))
-
-(->> sample
+(->> input
      parse-input
      (map tokenize)
      (map do-math-2)
      (reduce +))
-        
-        ;; (cond
-        ;;   (nil? t) (apply + ops) ;; end
-        ;;   times (let [operand (last ops)
-        ;;               new-ops (conj ops (* t operand))])
-        ;;   (case t
-        ;;     "+" (recur ops nil t-rest)
-        ;;     "*" (recur left true t-rest)
-        ;;     "(" (let [[right t-rest-2] (make-group t-rest)]
-        ;;           (recur (operator left (do-math right)) nil t-rest-2))
-        ;;     (recur (operator left (read-string t)) nil t-rest) ;; operand
-        ;;     ))))))
-
-(conj [1 2] (+ 3 4))
-
-(= + +)
