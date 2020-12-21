@@ -1,4 +1,5 @@
-(ns day18)
+(ns day18
+  (:require [clojure.string :as s]))
 
 (def sample "resources/day18-sample.txt")
 (def input "resources/day18.txt")
@@ -47,7 +48,7 @@
 (defn parse-input [file]
   (->> file
        slurp
-       (#(clojure.string/split % #"\n"))))
+       (#(s/split % #"\n"))))
 
 (->> input
      parse-input
