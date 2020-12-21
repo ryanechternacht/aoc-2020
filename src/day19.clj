@@ -29,18 +29,31 @@
              (let [{:keys [value opts]} (get rules rule)]
                (if value
                  (= value string)
-                 (some (fn [[opt-1 opt-2]]
-                         (if (nil? opt-2)
-                           (check-rule opt-1 string)
-                           (loop [i 1]
-                             (if (= i (count string))
-                               false ;; final failure
-                               (let [left (subs string 0 i)
-                                     right (subs string i)]
-                                 (if (and (check-rule opt-1 left)
-                                          (check-rule opt-2 right))
-                                   true ;; success
-                                   (recur (inc i))))))))
+                 (some (fn [[opt-1 opt-2 opt-3]]
+                         (cond
+                           (nil? opt-2) (check-rule opt-1 string)
+                           (nil? opt-3) (loop [i 1]
+                                          (if (= i (count string))
+                                            false ;; final failure
+                                            (let [left (subs string 0 i)
+                                                  right (subs string i)]
+                                              (if (and (check-rule opt-1 left)
+                                                       (check-rule opt-2 right))
+                                                true ;; success
+                                                (recur (inc i))))))
+                           :else (loop [i 1
+                                        j 2]
+                                   (cond
+                                     (= i (count string)) false ;; final failure
+                                     (= j (count string)) (recur (inc i) (inc (inc i)))
+                                     :else (let [left (subs string 0 i)
+                                                 middle (subs string i j)
+                                                 right (subs string j)]
+                                             (if (and (check-rule opt-1 left)
+                                                      (check-rule opt-2 middle)
+                                                      (check-rule opt-3 right))
+                                               true ;; success
+                                               (recur i (inc j))))))))
                        opts))))))
 
 (defn parse-tests [file]
@@ -48,5 +61,10 @@
        slurp
        (re-seq #"[ab]+")))
 
-(->> (parse-test input-tests)
-     (map #(check-rule)))
+(->> (parse-tests input-tests)
+     (map (fn [x]
+            (let [res (check-rule 0 x)]
+              (println x res)
+              res)))
+     (filter identity)
+     count)
