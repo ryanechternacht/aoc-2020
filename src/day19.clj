@@ -5,6 +5,7 @@
 (def sample-tests "resources/day19-sample-tests.txt")
 (def input-rules "resources/day19-rules.txt")
 (def input-tests "resources/day19-tests.txt")
+(def input-rules-pt2 "resources/day19-pt2-rules.txt")
 
 (defn parse-rule [rule]
   (if (= (first rule) \")
@@ -22,7 +23,7 @@
                 [(read-string k) (parse-rule v)])))
        (into {})))
 
-(def rules (parse-rules input-rules))
+(def rules (parse-rules input-rules-pt2))
 
 (def check-rule
   (memoize (fn [rule string]
