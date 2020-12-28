@@ -6,7 +6,7 @@
 
 (defn parse-tile [tile-lines]
   (let [num (first (re-seq #"\d+" (first tile-lines)))]
-    {:num num :data (rest tile-lines)}))
+    {:num (read-string num) :data (rest tile-lines)}))
 
 (parse-tile ["Tile 2311:"
              "..##.#..#."
@@ -44,4 +44,12 @@
 (->> sample
      parse-input
      (map parse-tile)
-     (reduce #(grab-edges %1 %2) {}))
+     (reduce #(grab-edges %1 %2) {})
+     (filter (fn [[_ v]] (= 1 (count v))))
+     (reduce (fn [acc [_ v-set]]
+               (let [v (first v-set)
+                     c (get acc v 0)]
+                 (assoc acc v (inc c)))) {})
+     (filter (fn [[_ v]] (= v 4)))
+     (map (fn [[k _]] k))
+     (reduce *))
