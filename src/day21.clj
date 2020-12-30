@@ -19,40 +19,30 @@
          [(disj ings ing) (disj algs alg)])
        coll))
 
-(defn isolate-ingredients [coll]
-  (loop [[[ings algs] & rest] coll]
-    (println "start" ings algs)
-    (if (nil? ings)
-      :failure
-      (if (and (seq ings)
-               (= (count ings) (count algs)))
-        [[ings algs]]
-        (let [isolated
-              (->> rest
-                   (map (fn [[i a]]
-                          [(set/intersection ings i)
-                           (set/intersection algs a)]))
-                   (filter (fn [[i a]]
-                             (= (count i) (count a))))
-                   (remove (fn [[i _]]
-                             (empty? i))))]
-          (println "isolated" isolated)
-          (if (seq isolated)
-            isolated
-            (recur rest)))))))
-
 (defn remove-allergens [full-coll]
-  (loop [coll full-coll]
-    (if (every? (fn [[_ algs]] (empty? algs)) coll)
-      coll
-      (recur (reduce (fn [c [ing alg]]
-                       (println "reduce" c ing alg)
-                       (remove-ingredient c (first ing) (first alg)))
-                     coll
-                     (isolate-ingredients coll))))))
+  (let [vec-algs (vec (reduce (fn [acc [_ a]] (into acc a))
+                              #{}
+                              full-coll))]
+    (loop [coll full-coll
+           [alg & others] vec-algs]
+      (Thread/sleep 1000)
+      (println coll)
+      (println alg others)
+      (if (nil? alg)
+        coll
+        (let [ing
+              (->> coll
+                   (filter (fn [[_ a]] (a alg)))
+                   (map first)
+                   (reduce set/intersection))]
+          (println "ing" ing)
+          (if (= 1 (count ing))
+            (recur (remove-ingredient coll (first ing) alg) others)
+            (recur coll (conj (vec others) alg))))))))
 
+(remove-allergens (parse-input sample))
 
-(->> sample
+(->> input
      parse-input
      remove-allergens
      (map first)
