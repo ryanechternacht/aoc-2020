@@ -24,31 +24,25 @@
                               #{}
                               full-coll))]
     (loop [coll full-coll
-           [alg & others] vec-algs]
-      (Thread/sleep 1000)
-      (println coll)
-      (println alg others)
+           [alg & others] vec-algs
+           bad-ingredients []]
       (if (nil? alg)
-        coll
+        bad-ingredients
         (let [ing
               (->> coll
                    (filter (fn [[_ a]] (a alg)))
                    (map first)
                    (reduce set/intersection))]
-          (println "ing" ing)
           (if (= 1 (count ing))
-            (recur (remove-ingredient coll (first ing) alg) others)
-            (recur coll (conj (vec others) alg))))))))
+            (recur (remove-ingredient coll (first ing) alg) others (conj bad-ingredients [ing alg]))
+            (recur coll (conj (vec others) alg) bad-ingredients)))))))
 
 (remove-allergens (parse-input sample))
 
 (->> input
      parse-input
      remove-allergens
+     (sort-by second)
      (map first)
-     (map count)
-     (reduce +))
-
-(isolate-ingredients (parse-input input))
-
-(isolate-ingredients (par))
+     (map first)
+     (s/join ","))
